@@ -1,0 +1,114 @@
+diff --git a/minecraft/net/minecraft/src/ItemFishingRod.java b/minecraft/net/minecraft/src/ItemFishingRod.java
+index 2d2ddcb..c05827c 100644
+--- a/minecraft/net/minecraft/src/ItemFishingRod.java
++++ b/minecraft/net/minecraft/src/ItemFishingRod.java
+@@ -42,18 +42,48 @@ public class ItemFishingRod extends Item
+         }
+         else
+         {
+-            par2World.playSoundAtEntity(par3EntityPlayer, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+-
+-            if (!par2World.isRemote)
++            boolean appliedBait = false;
++            
++            for(int i = 0; i<9; i++)
+             {
+-                par2World.spawnEntityInWorld(new EntityFishHook(par2World, par3EntityPlayer));
++            	ItemStack check = par3EntityPlayer.inventory.getStackInSlot(i);
++            	if(check != null && IsFishingBait(check))
++            	{
++            		par2World.playSoundAtEntity(par3EntityPlayer, "mob.slime.attack", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
++            		par3EntityPlayer.inventory.consumeInventoryItem(check.itemID);
++            		ItemStack update = par3EntityPlayer.getCurrentEquippedItem().copy();
++            		update.itemID = FCBetterThanWolves.fcItemFishingRodBaited.itemID;
++            		par3EntityPlayer.inventory.setInventorySlotContents(par3EntityPlayer.inventory.currentItem, update);
++            		appliedBait = true;
++            		break;
++            	}
++            	
++            	
+             }
++            
++            if(!appliedBait)
++            {
++            	par2World.playSoundAtEntity(par3EntityPlayer, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
++            	if (!par2World.isRemote)
++                {
++                    par2World.spawnEntityInWorld(new EntityFishHook(par2World, par3EntityPlayer));
++                }
+ 
+-            par3EntityPlayer.swingItem();
++                par3EntityPlayer.swingItem();
++            }
++
++            
+         }
+ 
+         return par1ItemStack;
+     }
++    
++    // COPY FROM FCRecipesFishingRodBaiting !!!
++    private boolean IsFishingBait(ItemStack var1)
++    {
++        int var2 = var1.itemID;
++        return var2 == FCBetterThanWolves.fcItemCreeperOysters.itemID || var2 == FCBetterThanWolves.fcItemBatWing.itemID || var2 == FCBetterThanWolves.fcItemWitchWart.itemID || var2 == Item.spiderEye.itemID || var2 == Item.rottenFlesh.itemID;
++    }
+ 
+     public void registerIcons(IconRegister par1IconRegister)
+     {
+diff --git a/minecraft_server/net/minecraft/src/ItemFishingRod.java b/minecraft_server/net/minecraft/src/ItemFishingRod.java
+index 00e723a..488c669 100644
+--- a/minecraft_server/net/minecraft/src/ItemFishingRod.java
++++ b/minecraft_server/net/minecraft/src/ItemFishingRod.java
+@@ -23,16 +23,46 @@ public class ItemFishingRod extends Item
+         }
+         else
+         {
+-            par2World.playSoundAtEntity(par3EntityPlayer, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+-
+-            if (!par2World.isRemote)
++            boolean appliedBait = false;
++            
++            for(int i = 0; i<9; i++)
+             {
+-                par2World.spawnEntityInWorld(new EntityFishHook(par2World, par3EntityPlayer));
++            	ItemStack check = par3EntityPlayer.inventory.getStackInSlot(i);
++            	if(check != null && IsFishingBait(check))
++            	{
++            		par2World.playSoundAtEntity(par3EntityPlayer, "mob.slime.attack", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
++            		par3EntityPlayer.inventory.consumeInventoryItem(check.itemID);
++            		ItemStack update = par3EntityPlayer.getCurrentEquippedItem().copy();
++            		update.itemID = FCBetterThanWolves.fcItemFishingRodBaited.itemID;
++            		par3EntityPlayer.inventory.setInventorySlotContents(par3EntityPlayer.inventory.currentItem, update);
++            		appliedBait = true;
++            		break;
++            	}
++            	
++            	
+             }
++            
++            if(!appliedBait)
++            {
++            	par2World.playSoundAtEntity(par3EntityPlayer, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
++            	if (!par2World.isRemote)
++                {
++                    par2World.spawnEntityInWorld(new EntityFishHook(par2World, par3EntityPlayer));
++                }
+ 
+-            par3EntityPlayer.swingItem();
++                par3EntityPlayer.swingItem();
++            }
++
++            
+         }
+ 
+         return par1ItemStack;
+     }
++    
++    // COPY FROM FCRecipesFishingRodBaiting !!!
++    private boolean IsFishingBait(ItemStack var1)
++    {
++        int var2 = var1.itemID;
++        return var2 == FCBetterThanWolves.fcItemCreeperOysters.itemID || var2 == FCBetterThanWolves.fcItemBatWing.itemID || var2 == FCBetterThanWolves.fcItemWitchWart.itemID || var2 == Item.spiderEye.itemID || var2 == Item.rottenFlesh.itemID;
++    }
+ }
